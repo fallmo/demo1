@@ -4,7 +4,7 @@ const { redisClient } = require("../utils/redis.js");
 
 const router = Router();
 
-router.get("/version", (req, res) => res.send("version 1.0"));
+router.get("/version", (req, res) => res.send("version 1.2"));
 
 router.get("/env", (req, res) => res.json(process.env));
 
