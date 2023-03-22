@@ -2,7 +2,6 @@ const { Router } = require("express");
 const Link = require("../models/Link.js");
 const Joi = require("joi");
 const { generateString } = require("../utils/misc.js");
-const { setCache, clearCached } = require("../utils/redis.js");
 
 const router = Router();
 
@@ -23,7 +22,6 @@ router.delete("/:id", async (req, res) => {
 
   await link.remove();
   res.json({ _id: link._id });
-  await clearCached(link.ref);
 });
 
 router.post("/", async (req, res) => {
@@ -38,8 +36,6 @@ router.post("/", async (req, res) => {
   const link = await Link.create({ long_url: value.long_url, ref: generateString() });
 
   res.status(201).json(link);
-
-  await setCache(link.ref, link.long_url);
 });
 
 module.exports = router;

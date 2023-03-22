@@ -6,13 +6,11 @@ const morgan = require("morgan");
 const path = require("path");
 const debugRoutes = require("./routes/debug.js");
 const linkRoutes = require("./routes/links.js");
-const { getCached, redisClient } = require("./utils/redis.js");
 const Link = require("./models/Link.js");
 
 async function main() {
   checkEnvironment();
   await connectDatabase();
-  await redisClient.connected;
 
   const app = express();
 
@@ -31,12 +29,7 @@ async function main() {
   app.get("/:ref", async (req, res) => {
     const ref = req.params.ref;
 
-    let long_url = await getCached(ref);
-
-    if (!long_url) {
-      console.log(`failed to find link via ref: ${ref}`);
-      long_url = (await Link.findOne({ ref: ref }))?.long_url;
-    }
+    const long_url = (await Link.findOne({ ref: ref }))?.long_url;
 
     if (!long_url) return res.status(404).send("Url not found");
     return res.redirect(long_url);

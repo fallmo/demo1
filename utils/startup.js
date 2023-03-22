@@ -1,6 +1,6 @@
 module.exports = {
   checkEnvironment: function () {
-    const required = ["MONGO_URI", "REDIS_HOST"];
+    const required = ["MONGO_URI"];
     for (const key of required) {
       const exists = process.env[key];
       if (exists) continue;
